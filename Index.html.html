@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="nl"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>LeverHelder</title>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#eef3ee;--card:#fff;--ink:#17301f;--mute:#5b6f61;--acc:#1f6b45;--accfg:#fff;--line:#d3ddd5;
+--ok:#1f8f4f;--okbg:#dff1e5;--warn:#b4530a;--warnbg:#fdebd8;--bad:#b3261e;--badbg:#fbdedb;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#101a14;--card:#1a2a20;--ink:#e6f2ea;--mute:#9bb2a3;--acc:#5cc58b;--accfg:#08200f;--line:#2b4033;--ok:#5cc58b;--okbg:#1f3a29;--warn:#f0a05a;--warnbg:#3a2511;--bad:#ff8a80;--badbg:#42201d}}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:18px/1.45 'Atkinson Hyperlegible',system-ui,sans-serif}
+main{max-width:480px;margin:0 auto;padding:18px 16px 40px}
+h1{font-size:28px;line-height:1.15;margin:6px 0 8px}h2{font-size:20px;margin:0 0 6px}p{margin:0 0 10px}
+.mute{color:var(--mute);font-size:15px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;margin:14px 0}
+button{font:inherit;font-weight:700;border:0;border-radius:16px;padding:16px;min-height:60px;cursor:pointer;background:var(--acc);color:var(--accfg);width:100%;margin-top:10px}
+button.alt{background:transparent;color:var(--ink);border:2px solid var(--line)}
+button:active{transform:scale(.98)}button:focus-visible{outline:3px solid var(--warn);outline-offset:2px}
+.chip{display:inline-block;background:var(--okbg);color:var(--ok);font-weight:700;font-size:14px;border-radius:99px;padding:4px 12px}
+.hero{text-align:center;border-radius:24px;padding:20px 16px;margin:14px 0}
+.hero.ok{background:var(--okbg)}.hero.warn{background:var(--warnbg)}.hero.bad{background:var(--badbg)}.hero.none{background:var(--card);border:1px solid var(--line)}
+.hero h2{font-size:28px;margin:8px 0 4px}
+.ring text{font:700 30px 'Atkinson Hyperlegible',sans-serif;fill:var(--ink)}
+.tile{display:flex;align-items:center;gap:14px;text-align:left;background:var(--card);color:var(--ink);border:2px solid var(--line);margin-top:10px}
+.tile .ic{font-size:30px}.tile small{display:block;font-weight:400;color:var(--mute)}.tile.done{border-color:var(--ok)}
+.bar{height:8px;background:var(--line);border-radius:9px;overflow:hidden;margin:6px 0 18px}.bar i{display:block;height:100%;background:var(--acc)}
+.big{font-size:44px;font-weight:700;text-align:center;margin:30px 0;min-height:60px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.grid button{background:var(--card);color:var(--ink);border:2px solid var(--line);margin:0}
+.keys{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.keys button{background:var(--card);color:var(--ink);border:2px solid var(--line);font-size:24px;margin:0}
+.yn{display:grid;grid-template-columns:1fr 1fr;gap:12px}.yn button{min-height:80px;font-size:22px}
+#box{height:260px;border-radius:22px;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:700;text-align:center;padding:16px;user-select:none;margin:20px 0;background:var(--line)}
+.prog{font-size:15px;color:var(--mute);text-align:center}svg{width:100%;height:auto;overflow:visible}
+body{--bg:#071426;--card:#0e2444;--ink:#eaf2ff;--mute:#9db3d4;--acc:#1d7bd8;--accfg:#fff;--line:#1c3a66;--ok:#3ddc84;--okbg:#0f3a2c;--warn:#ffb54a;--warnbg:#3d2c0e;--bad:#ff6b6b;--badbg:#431b22;background:radial-gradient(circle at 80% 0,#0d2f5e,#071426 55%) fixed}
+main{padding-bottom:110px}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.hero2{position:relative;overflow:hidden;border-radius:22px;padding:20px 16px 80px;background:linear-gradient(135deg,#0c2f5c,#06182f 70%);border:1px solid var(--line);margin-bottom:14px}
+.hero2 h1{margin:0 0 6px}.hero2 p{max-width:60%;font-size:16px}
+.hero2 button{width:auto;padding:12px 20px;min-height:48px;border-radius:99px}
+.brain{position:absolute;right:-6px;top:8px;font-size:96px;filter:drop-shadow(0 0 20px #38bdf8)}
+.pulse{position:absolute;left:0;right:0;bottom:12px;width:100%;height:40px}
+.gc{background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden;margin:12px 0}
+.art{height:100px;display:flex;align-items:center;justify-content:center;font-size:54px}
+.a-dieren{background:linear-gradient(135deg,#6b4f2a,#2f5d3a)}.a-stroop{background:linear-gradient(135deg,#7a1f3d,#1d4ed8)}.a-reactie{background:linear-gradient(135deg,#1c2b3a,#3a6f8f)}.a-cijfers{background:linear-gradient(135deg,#12305c,#2b5aa8)}
+.gb{padding:14px}.gb h3{margin:0 0 4px;font-size:20px}
+.gr{display:flex;align-items:center;justify-content:space-between;gap:10px}.gr button{width:auto;padding:10px 22px;min-height:46px;margin:0;border-radius:99px}
+.tabs{position:fixed;left:0;right:0;bottom:0;display:flex;gap:6px;background:#06111f;border-top:1px solid var(--line);padding:6px 8px calc(6px + env(safe-area-inset-bottom,0px))}
+.tabs button{background:none;color:var(--mute);min-height:54px;margin:0;font-size:13px;padding:6px;border-radius:14px;display:flex;flex-direction:column;gap:2px;align-items:center;justify-content:center}
+.tabs button.on{color:#fff;background:var(--acc)}
+.nb{font-size:68px;font-weight:700;line-height:1}.nb span{font-size:44px;margin-left:10px}
+.rw{display:flex;gap:8px;justify-content:space-between;align-items:center;padding:10px 0;border-top:1px solid var(--line);font-size:16px}
+.br{display:flex;align-items:center;gap:8px;margin:10px 0}.bl{width:48px;font-size:14px}.bt{flex:1;height:22px;background:var(--line);border-radius:8px;overflow:hidden}.bt i{display:block;height:100%}
+.nu{background:var(--acc);color:#fff;border-radius:99px;font-size:12px;padding:1px 8px}
+h1{font-size:30px;font-weight:700;letter-spacing:-.4px}
+.card,.gc{background:linear-gradient(160deg,rgba(255,255,255,.07),rgba(255,255,255,.015)),var(--card);border:1px solid rgba(120,170,255,.18);box-shadow:0 10px 26px rgba(0,0,0,.3)}
+button{background:linear-gradient(180deg,#348fee,#1565c4);box-shadow:0 6px 16px rgba(29,123,216,.38);transition:transform .12s,box-shadow .12s}
+button.alt,.grid button,.keys button{background:rgba(255,255,255,.05);box-shadow:none;color:var(--ink)}
+button:active{transform:scale(.97)}
+.tabs{backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);background:rgba(6,17,31,.85)}
+.tabs button{box-shadow:none}.tabs button.on{background:rgba(29,123,216,.3);color:#fff}
+.hero{border-radius:26px;padding:24px 16px;box-shadow:0 12px 32px rgba(0,0,0,.32)}
+.hero2{box-shadow:0 16px 40px rgba(0,0,0,.45)}
+.brain{animation:float 4s ease-in-out infinite}
+@keyframes float{50%{transform:translateY(-7px)}}
+@keyframes draw{from{stroke-dasharray:0 400}}
+.ring circle:nth-of-type(2){animation:draw .9s ease-out}
+.ring text{font-size:34px}
+.art{position:relative;height:112px;font-size:60px}
+.gc.done{border-color:var(--ok)}
+.gc.done .art::after{content:var(--done,"Gedaan");position:absolute;top:10px;right:10px;background:var(--ok);color:#06210f;font:700 13px system-ui,sans-serif;padding:3px 11px;border-radius:99px}
+.big{text-shadow:0 0 26px rgba(77,163,255,.3)}
+.bar{height:10px}.bar i{background:linear-gradient(90deg,#348fee,#3ddc84);border-radius:9px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+.row2{display:flex;align-items:center;gap:14px;text-align:left;width:100%;background:var(--card);border:1px solid rgba(120,170,255,.18);border-radius:18px;padding:12px 14px;margin:10px 0;min-height:68px;color:var(--ink);box-shadow:none}
+.row2 b{display:block}.row2 small{display:block;font-weight:400;color:var(--mute)}.row2 i{margin-left:auto;font-style:normal;font-size:26px;color:var(--mute)}
+.ico{width:46px;height:46px;border-radius:50%;background:rgba(34,184,255,.15);display:flex;align-items:center;justify-content:center;font-size:24px;flex:none}
+.ico.big{width:64px;height:64px;font-size:34px;border:4px solid #22b8ff;background:none}
+.mini{width:52px;flex:none}
+.lg{position:fixed;top:calc(10px + env(safe-area-inset-top,0px));right:12px;display:flex;gap:6px;z-index:5}
+.lgb{width:auto;min-height:36px;padding:6px 12px;margin:0;border-radius:99px;font-size:14px}.lgi{display:flex;gap:10px}.lgi .lgb{flex:1;min-height:48px;font-size:16px}
+.ei{display:inline-block;width:1.15em;height:1.15em;vertical-align:-.2em}.ei svg{width:100%;height:100%}
+.ico,.brain,.hand,.spb{color:#22b8ff}.art{color:#fff}.tabs .ei{font-size:24px}.ico .ei{font-size:26px}
+.tb{width:100%;border-collapse:collapse;font-size:15px}.tb th,.tb td{padding:8px 4px;border-bottom:1px solid var(--line);text-align:center}.tb th{color:var(--mute)}
+@media print{body{--bg:#fff;--card:#fff;--ink:#000;--mute:#444;--line:#bbb;--ok:#117a3a;--warn:#a85500;--bad:#b00020;background:#fff!important}.tabs,button{display:none!important}.card{box-shadow:none!important;background:#fff!important}}
+.prof{display:flex;gap:14px;align-items:center}.av{width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,#2f8df0,#22b8ff);display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:700;color:#fff;flex:none}.gear{width:44px;min-height:44px;padding:0;margin:0;border-radius:50%;background:rgba(255,255,255,.06);box-shadow:none;font-size:20px}
+.ov{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center;font-size:14px}.ov .ico{margin:0 auto 6px}
+.steps{display:flex;align-items:center;justify-content:center;margin:22px 0}.st{width:36px;height:36px;border-radius:50%;background:var(--line);display:flex;align-items:center;justify-content:center;font-weight:700}.st.on{background:#1d8fff}.ln{width:30px;height:2px;background:var(--line)}
+.hand{font-size:90px;text-align:center;margin:18px 0}
+.sp{min-height:calc(100vh - 80px);display:flex;flex-direction:column;align-items:center;text-align:center;padding-top:50px}
+.spb{font-size:88px;filter:drop-shadow(0 0 24px #22b8ff)}.spt{font-size:54px;margin:6px 0 14px}.spp{font-size:21px;line-height:1.5}.spf{margin-top:auto;width:100%}
+#box{width:min(280px,80vw);height:min(280px,80vw);border-radius:50%;border:10px solid #22b8ff;margin:20px auto}
+</style></head><body><main id="app"></main>
+<script>
+const KEY='alertheid-v2',$=document.getElementById('app');
+const GAMES={dieren:['Dierentest','🐘','1 minuut dieren noemen'],stroop:['Kleurentest','🎨','8 vragen'],reactie:['Reactiesnelheid','⚡','5 keer tikken'],cijfers:['Cijferreeks','🔢','onthoud cijfers']};
+const LEVELS={
+1:{naam:'Groep 1: stabiel',uitleg:'Je lever is op dit moment stabiel. Elke dag 3 korte spelletjes, met de dierentest als eerste.',games:['dieren','stroop','reactie'],thr:20,ok:60,warn:40,extra:''},
+2:{naam:'Groep 2: verhoogd risico',uitleg:'Je hebt een hoger risico op sufheid. Elke dag 4 spelletjes en een scherpere waarschuwing.',games:['dieren','stroop','reactie','cijfers'],thr:15,ok:65,warn:45,extra:"Let ook op je slaapritme: overdag slapen en 's nachts wakker zijn is een vroeg signaal."},
+3:{naam:'Groep 3: wachtlijst transplantatie',uitleg:'Je wacht op een levertransplantatie. Elke dag 4 spelletjes en de gevoeligste waarschuwing.',games:['dieren','stroop','reactie','cijfers'],thr:10,ok:70,warn:50,extra:'Bel bij een daling meteen je transplantatiecentrum en houd je telefoon bereikbaar.'}};
+const Q=[['Sta je op de wachtlijst voor een levertransplantatie?',0],['Ben je ooit opgenomen of erg verward geweest door je lever (hepatische encefalopathie)?',2],['Gebruik je lactulose of rifaximine tegen sufheid?',2],['Heb je ooit buikvocht of een bloeding uit slokdarmaders gehad?',1],['Heb je levercirrose?',1]];
+let H={},LV=0;try{H=JSON.parse(localStorage.getItem(KEY)||'{}');LV=+(localStorage.getItem(KEY+'-lv')||0)}catch(e){}
+let NM='';try{NM=localStorage.getItem(KEY+'-nm')||''}catch(e){}
+let ST={};try{ST=JSON.parse(localStorage.getItem(KEY+'-st')||'{}')}catch(e){}
+let LG=[];try{LG=JSON.parse(localStorage.getItem(KEY+'-log')||'[]')}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(H));localStorage.setItem(KEY+'-lv',LV);localStorage.setItem(KEY+'-log',JSON.stringify(LG.slice(-300)));localStorage.setItem(KEY+'-st',JSON.stringify(ST))}catch(e){}};
+const today=()=>new Date().toISOString().slice(0,10),clamp=v=>Math.max(0,Math.min(100,Math.round(v))),avg=a=>a.reduce((s,x)=>s+x,0)/a.length;
+const total=d=>{const v=Object.values(H[d]||{});return v.length?avg(v):null};
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));let timer=null,gen=0;const stop=()=>{clearTimeout(timer);gen++};
+
+/* Direct oordeel: meteen vanaf de eerste meting, en vergelijking met eerdere dagen zodra die er zijn */
+function verdict(n){const L=LEVELS[LV];
+  const prevs=Object.keys(H).filter(d=>d<today()&&total(d)!=null).slice(-7).map(total),base=prevs.length?avg(prevs):null;
+  let k=n>=L.ok?'ok':n>=L.warn?'warn':'bad';
+  if(base!=null){const drop=base-n;if(drop>=L.thr*1.5)k='bad';else if(drop>=L.thr&&k==='ok')k='warn'}
+  const T={ok:['Goed: je bent alert',''],
+   warn:['Let op: lager dan normaal',''],
+   bad:['Niet goed','']}[k];
+  return {k,t:T[0],d:T[1],base}}
+function ring(n,k,s=150,lab){const c=2*Math.PI*52,col=k?`var(--${k})`:'var(--line)';
+  return `<svg class="ring" width="${s}" height="${s}" viewBox="0 0 120 120" style="width:${s}px;display:block;margin:0 auto"><circle cx="60" cy="60" r="52" fill="none" stroke="var(--line)" stroke-width="10"/><circle cx="60" cy="60" r="52" fill="none" stroke="${col}" stroke-width="10" stroke-linecap="round" stroke-dasharray="${c*(n||0)/100} ${c}" transform="rotate(-90 60 60)"/><text x="60" y="69" text-anchor="middle">${n==null?'–':lab!=null?lab:Math.round(n)}</text></svg>`}
+
+/* Vragenlijst, daarna indeling in een groep */
+let I={i:0,p:0,tx:false};
+function intake(){stop();I={i:0,p:0,tx:false};
+  $.innerHTML=`<h1>Welkom bij de Alertheidsmeter</h1><p>Beantwoord eerst 5 korte vragen. Dan kiest de app de juiste groep en de juiste spelletjes voor jou.</p><button onclick="ask()">Start de vragen</button><p class="mute" style="margin-top:16px">Dit is een hulpmiddel en geen diagnose.</p>`}
+function ask(){const [t]=Q[I.i];
+  $.innerHTML=`<div class="prog">Vraag ${I.i+1} van ${Q.length}</div><div class="bar"><i style="width:${I.i/Q.length*100}%"></i></div><h1>${t}</h1><p class="mute">Weet je het niet zeker? Kies dan Ja. De app let dan extra goed op.</p><div class="yn"><button onclick="ans(1)">Ja</button><button class="alt" onclick="ans(0)">Nee</button></div>${I.i?'<button class="alt" onclick="I.i--;ask()">Vorige vraag</button>':''}`}
+function ans(y){if(I.i===0)I.tx=!!y;else I[I.i]=y?Q[I.i][1]:0;
+  if(I.i<Q.length-1){I.i++;return ask()}
+  let p=0;for(let j=1;j<Q.length;j++)p+=I[j]||0;
+  LV=I.tx?3:p>=3?2:1;PERS=true;try{localStorage.setItem(KEY+'-pers','1')}catch(e){}save();const L=LEVELS[LV];
+  $.innerHTML=`<div class="hero ok"><div style="font-size:48px">✅</div><h1>${L.naam}</h1><p>${L.uitleg}</p></div><h2>Alle groepen</h2>${[1,2,3].map(k=>`<div class="card" style="${k===LV?'border:2px solid var(--ok)':'opacity:.55'}"><b>${k===LV?'Jij: ':''}${LEVELS[k].naam}</b><p class="mute" style="margin:4px 0 0">${LEVELS[k].uitleg}</p></div>`).join('')}<p class="mute">Klopt dit niet? Je kunt je antwoorden later opnieuw invullen. Laat je groep ook controleren door je arts.</p><button onclick="home()">Naar mijn meter</button>`}
+
+function home(){stop();if(!LV)return intake();
+  const L=LEVELS[LV],t=H[today()]||{},n=total(today()),v=n!=null?verdict(n):null;
+  $.innerHTML=`<span class="chip">${L.naam}</span>
+  <div class="hero ${v?v.k:'none'}">${ring(n,v&&v.k)}<h2>${v?v.t:'Nog geen meting vandaag'}</h2><p>${v?v.d:'Doe een spelletje en je ziet meteen hoe alert je bent.'}</p></div>
+  <h2>Mijn spelletjes van vandaag</h2>
+  ${L.games.map(g=>`<button class="tile ${t[g]!=null?'done':''}" onclick="start('${g}')"><span class="ic">${GAMES[g][1]}</span><span>${GAMES[g][0]}<small>${t[g]!=null?lab(g,t[g])+'. '+(g==='dieren'?Math.round(t[g]/5)+' dieren':'Score '+t[g])+'. Tik om opnieuw':GAMES[g][2]}</small></span></button>`).join('')}
+  <div class="card" id="st">${stoolBox()}</div>
+  <button class="alt" onclick="stats('dag')">📊 Statistieken per dag en uur</button>
+  <div class="card"><h2>Mijn verloop</h2>${chart()}</div>
+  <p class="mute">Geen diagnose. Bij klachten of twijfel: bel altijd je arts.</p>
+  <button class="alt" onclick="intake()">Vragen opnieuw invullen</button>
+  <button class="alt" onclick="if(confirm('Alle scores wissen?')){H={};save();home()}">Scores wissen</button>`}
+function stoolLab(c){return c===0?['bad','🔴 Niet goed']:(c===1||c>=4)?['warn','🟠 Let op']:['ok','🟢 Goed']}
+function stoolBox(){const c=ST[today()]||0,[k,l]=stoolLab(c);return `<h2>🚽 Ontlasting vandaag</h2><div style="display:flex;align-items:center;gap:12px"><div class="big" style="margin:0;min-height:0;font-size:52px;flex:0 0 70px">${c}</div><div style="flex:1"><b style="color:var(--${k})">${l}</b><div class="mute">Meestal goed: 2 tot 3 keer per dag</div></div></div><div class="yn"><button onclick="stool(1)">+1</button><button class="alt" onclick="stool(-1)">Een terug</button></div>`}
+function stool(d){const t=today();ST[t]=Math.max(0,(ST[t]||0)+d);save();document.getElementById('st').innerHTML=stoolBox()}
+function stats(m){stop();const L=LEVELS[LV],col=s=>s>=L.ok?'ok':s>=L.warn?'warn':'bad';let rows=[];
+  if(m==='dag'){rows=Object.keys(H).filter(d=>total(d)!=null).sort().slice(-14).reverse().map(d=>[d.slice(8)+'-'+d.slice(5,7),total(d)])}
+  else{const by={},s0=new Date();s0.setHours(0,0,0,0);LG.filter(x=>x.t>=s0.getTime()).forEach(x=>{const h=new Date(x.t).getHours();(by[h]=by[h]||[]).push(x.s)});rows=Object.keys(by).sort((a,b)=>a-b).map(h=>[String(h).padStart(2,'0')+':00',avg(by[h])])}
+  $.innerHTML=`<h1>Statistieken</h1><div class="yn"><button class="${m==='dag'?'':'alt'}" onclick="stats('dag')">Per dag</button><button class="${m==='uur'?'':'alt'}" onclick="stats('uur')">Per uur</button></div><div class="card"><h2>${m==='dag'?'Gemiddelde score per dag':'Vandaag per uur'}</h2>${rows.length?rows.map(r=>`<div style="display:flex;align-items:center;gap:10px;margin:10px 0"><span style="width:56px;font-size:15px">${r[0]}</span><div style="flex:1;background:var(--line);border-radius:9px;height:26px;overflow:hidden"><i style="display:block;height:100%;width:${Math.max(4,r[1])}%;background:var(--${col(r[1])})"></i></div><b style="width:34px;text-align:right">${Math.round(r[1])}</b></div>`).join(''):'<p class="mute">Nog geen metingen.</p>'}</div><p class="mute">Groen is goed, oranje let op, rood niet goed.</p><button onclick="home()">Terug</button>`}
+function lab(g,s){const c=Math.round(s/5),L=LEVELS[LV],k=g==='dieren'?(c>=15?'ok':c>=10?'warn':'bad'):(s>=L.ok?'ok':s>=L.warn?'warn':'bad');return {ok:'🟢 Goed',warn:'🟠 Let op',bad:'🔴 Niet goed'}[k]}
+function chart(){const d=Object.keys(H).filter(k=>total(k)!=null).sort().slice(-14);
+  if(d.length<2)return '<p class="mute">Vanaf de tweede dag zie je hier je verloop.</p>';
+  const W=320,Ht=130,x=i=>24+i*(W-48)/(d.length-1),y=v=>Ht-10-v*(Ht-30)/100,P=d.map((k,i)=>[x(i),y(total(k))]);
+  return `<svg viewBox="0 0 ${W} ${Ht+16}" role="img" aria-label="Scores per dag">${[0,50,100].map(v=>`<line x1="24" x2="${W-24}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)"/><text x="0" y="${y(v)+4}" font-size="10" fill="var(--mute)">${v}</text>`).join('')}<line x1="24" x2="${W-24}" y1="${y(LEVELS[LV].ok)}" y2="${y(LEVELS[LV].ok)}" stroke="var(--ok)" stroke-dasharray="4 4"/><polyline fill="none" stroke="var(--acc)" stroke-width="3" points="${P.map(p=>p.join(',')).join(' ')}"/>${P.map(p=>`<circle cx="${p[0]}" cy="${p[1]}" r="4" fill="var(--acc)"/>`).join('')}<text x="24" y="${Ht+12}" font-size="10" fill="var(--mute)">${d[0].slice(5)}</text><text x="${W-24}" y="${Ht+12}" font-size="10" text-anchor="end" fill="var(--mute)">${d[d.length-1].slice(5)}</text></svg><p class="mute">Gestippelde lijn: je doelniveau.</p>`}
+
+function finish(g,score,detail){const t=today();H[t]=H[t]||{};H[t][g]=score;LG.push({t:Date.now(),g,s:score});save();const v=verdict(score);if(g==='dieren'){const c=Math.round(score/5),T={ok:['Goed: normaal resultaat',''],warn:['Let op: iets laag',''],bad:['Niet goed','']};v.k=c>=15?'ok':c>=10?'warn':'bad';v.t=T[v.k][0];v.d=T[v.k][1]}
+  $.innerHTML=`<div class="hero ${v.k}">${ring(score,v.k,150,g==='dieren'?Math.round(score/5):null)}<h2>${v.t}</h2><p>${v.d}</p><p class="mute">${detail}${v.base!=null?` Je gemiddelde van eerdere dagen: ${Math.round(v.base)}.`:''}</p></div><button onclick="home()">Terug naar mijn meter</button>`}
+const start=g=>{stop();({dieren,stroop,reactie,cijfers})[g]()};
+
+function dieren(){const my=++gen;let n=0;
+  $.innerHTML=`<h1>Dierentest</h1><p>Noem in 1 minuut zoveel mogelijk <b>verschillende dieren</b>. Zeg ze hardop. Tik na elk dier op <b>+1</b>, of laat iemand anders voor je tellen. Hetzelfde dier twee keer telt niet.</p><div class="card"><p class="mute">Dit is dezelfde vraag die de arts stelt. Voorbeeld: hond, kat, paard.</p></div><button id="go">Start de minuut</button>`;
+  document.getElementById('go').onclick=()=>{const end=Date.now()+60000;
+    $.innerHTML=`<div class="hero none"><div class="prog" id="t">60 seconden</div><div class="bar"><i id="b" style="width:100%"></i></div><div class="big" id="n" style="font-size:88px;margin:8px 0">0</div><p class="mute">dieren</p></div><button id="p" style="min-height:120px;font-size:32px">+1 🐘</button><button class="alt" id="u">Een terug</button>`;
+    const N=document.getElementById('n');
+    document.getElementById('p').onclick=()=>{n++;N.textContent=n};
+    document.getElementById('u').onclick=()=>{n=Math.max(0,n-1);N.textContent=n};
+    const tick=()=>{if(my!==gen)return;const s=Math.max(0,Math.ceil((end-Date.now())/1000));document.getElementById('t').textContent=s+' seconden';document.getElementById('b').style.width=(s/60*100)+'%';if(s<=0)return finish('dieren',clamp(n*5),`Je noemde ${n} dieren in 1 minuut.`);timer=setTimeout(tick,250)};tick()}}
+function stroop(){const C=[['ROOD','#ff5252'],['BLAUW','#4da3ff'],['GROEN','#3ddc84']];let n=0,ok=0,times=[],t0;
+  $.innerHTML=`<h1>Kleurentest</h1><p>Je ziet een woord in een kleur. Tik de <b>kleur van de letters</b>, niet wat er staat. Neem rustig de tijd.</p><button onclick="stroopNext()">Begin</button>`;
+  window.stroopNext=()=>{if(n>=8){const rt=avg(times)/1000;return finish('stroop',clamp(ok/8*100-Math.max(0,rt-2.5)*10),`${ok} van 8 goed, gemiddeld ${rt.toFixed(1)} seconden.`)}
+    const c=C[Math.random()*3|0];const w=Math.random()<.5?c:C[Math.random()*3|0];
+    $.innerHTML=`<div class="prog">${n+1} van 8</div><div class="big" style="color:${c[1]}">${w[0]}</div><div class="grid" style="grid-template-columns:repeat(3,1fr)">${C.map(k=>`<button data-n="${k[0]}">${k[0]}</button>`).join('')}</div>`;t0=performance.now();
+    $.querySelectorAll('.grid button').forEach(b=>b.onclick=()=>{times.push(performance.now()-t0);if(b.dataset.n===c[0])ok++;n++;stroopNext()})}}
+
+function reactie(){let n=0,res=[],t0,state='idle',my=++gen;
+  $.innerHTML=`<h1>Reactiesnelheid</h1><p class="mute">Zodra het vlak groen wordt, tik je zo snel mogelijk. 5 keer.</p><div id="box">Tik om te beginnen</div>`;
+  const B=()=>document.getElementById('box');
+  const round=()=>{state='wait';B().style.background='var(--line)';B().style.color='';B().textContent=`Wacht... (${n+1} van 5)`;
+    timer=setTimeout(()=>{if(my!==gen)return;state='go';B().style.background='#2e9e57';B().style.color='#fff';B().textContent='TIK!';t0=performance.now()},1500+Math.random()*2500)};
+  B().onclick=()=>{if(state==='idle')round();
+    else if(state==='wait'){clearTimeout(timer);B().textContent='Te vroeg! Tik om opnieuw te proberen.';state='idle'}
+    else if(state==='go'){const ms=performance.now()-t0;res.push(ms);n++;
+      if(n>=5){const a=avg(res);return finish('reactie',clamp(100-(a-300)/8),`Gemiddelde reactietijd: ${Math.round(a)} ms.`)}
+      B().style.background='var(--line)';B().style.color='';B().textContent=`${Math.round(ms)} ms. Tik voor de volgende.`;state='idle'}}}
+
+function cijfers(){const my=++gen;let span=3,best=2;
+  const end=()=>finish('cijfers',clamp((best-2)/6*100),`Je onthield ${best} cijfers achter elkaar.`);
+  const play=async()=>{const seq=Array.from({length:span},()=>Math.random()*10|0);
+    $.innerHTML=`<div class="prog">Onthoud ${span} cijfers</div><div class="big" id="d"></div>`;const d=document.getElementById('d');await sleep(600);
+    for(const x of seq){if(my!==gen)return;d.textContent=x;await sleep(900);d.textContent='';await sleep(250)}
+    if(my!==gen)return;ask2(seq)};
+  const ask2=seq=>{let inp='';const draw=()=>{$.innerHTML=`<div class="prog">Tik de cijfers in dezelfde volgorde</div><div class="big">${inp.padEnd(span,'•').split('').join(' ')}</div><div class="keys">${[1,2,3,4,5,6,7,8,9,'wis',0].map(k=>`<button data-k="${k}">${k}</button>`).join('')}</div>`;
+    $.querySelectorAll('.keys button').forEach(b=>b.onclick=()=>{const k=b.dataset.k;if(k==='wis')inp=inp.slice(0,-1);else inp+=k;
+      if(inp.length===span){if(inp===seq.join('')){best=span;span++;return span>9?end():play()}return end()}draw()})};draw()};
+  $.innerHTML=`<h1>Cijferreeks</h1><p>Je ziet losse cijfers na elkaar. Tik ze daarna in dezelfde volgorde in. Het wordt steeds langer.</p><button id="go">Begin</button>`;
+  document.getElementById('go').onclick=play}
+const DESC={dieren:'Noem in 1 minuut zoveel mogelijk dieren.',stroop:'Tik de kleur van de letters, niet het woord.',reactie:'Tik zo snel mogelijk als het vlak groen wordt.',cijfers:'Onthoud de cijfers en tik ze in de juiste volgorde.'};
+function setNm(){NM=(document.getElementById('nm').value||'').trim().slice(0,20);try{localStorage.setItem(KEY+'-nm',NM)}catch(e){}home()}
+function askReset(){document.getElementById('rs').innerHTML=`<p><b>Alle scores en ontlasting wissen?</b></p><div class="yn"><button onclick="resetAll()">Ja, wissen</button><button class="alt" onclick="inst()">Annuleren</button></div>`}
+function resetAll(){H={};LG=[];ST={};save();home()}
+function greet(){const h=new Date().getHours();return h<12?'Goedemorgen':h<18?'Goedemiddag':'Goedenavond'}
+function streak(){let n=0;const d=new Date();if(total(d.toISOString().slice(0,10))==null)d.setDate(d.getDate()-1);while(total(d.toISOString().slice(0,10))!=null){n++;d.setDate(d.getDate()-1)}return n}
+function stoolCard(){const ks=Object.keys(ST).sort().slice(-14).reverse(),c=ST[today()]||0;return `<div class="card"><h2>🚽 Ontlasting</h2><p class="mute">Vandaag: <b>${c}</b> keer. ${stoolLab(c)[1]}</p>${ks.length?ks.map(k=>{const [kk,l]=stoolLab(ST[k]);return `<div class="rw"><span>${k.slice(8)}-${k.slice(5,7)}</span><b>${ST[k]} keer</b><span style="color:var(--${kk})">${l}</span></div>`}).join(''):'<p class="mute">Nog niets bijgehouden.</p>'}</div>`}
+function arr(d){return d>=3?['▲','ok']:d<=-3?['▼','bad']:['▶','mute']}
+function tabs(a){return `<nav class="tabs">${[['home()','home','🏠','Home'],["stats('dag')",'stats','📊','Statistieken'],['inst()','inst','⚙️','Instellingen']].map(t=>`<button class="${a===t[1]?'on':''}" onclick="${t[0]}"><span>${t[2]}</span>${t[3]}</button>`).join('')}</nav>`}
+function home(){stop();if(!LV)return intake();
+ const L=LEVELS[LV],t=H[today()]||{},n=total(today()),v=n!=null?verdict(n):null;
+ $.innerHTML=`<header class="top"><div><b>🧠 AlertheidTest</b><div class="mute">Scherper. Sneller. Jij.</div></div><span class="chip">${L.naam.split(':')[0]}</span></header>
+ <section class="hero2"><h1>${greet()}${NM?', '+NM:''}</h1><p>Test vandaag je alertheid, concentratie en reactievermogen.</p><button onclick="document.getElementById('gm').scrollIntoView({behavior:'smooth'})">▶ Start een test</button><div class="brain">🧠</div><svg class="pulse" viewBox="0 0 200 40" preserveAspectRatio="none"><polyline points="0,20 50,20 62,20 68,4 76,36 84,20 120,20 132,20 138,8 146,32 152,20 200,20" fill="none" stroke="#38bdf8" stroke-width="1.5"/></svg></section>${NM?'':`<div class="card"><p>Hoe heet je?</p><input id="nm" maxlength="20" placeholder="Jouw naam" style="width:100%;font:inherit;padding:14px;border-radius:12px;border:2px solid var(--line);background:var(--bg);color:var(--ink)"><button onclick="setNm()">Opslaan</button></div>`}
+ <div class="hero ${v?v.k:'none'}">${ring(n,v&&v.k,120)}<h2>${v?v.t:'Nog geen meting vandaag'}</h2><p class="mute">🔥 ${streak()} dagen op rij</p></div>
+ <h2 id="gm">Mijn spelletjes van vandaag</h2><p class="mute">${L.games.filter(g=>t[g]!=null).length} van ${L.games.length} gedaan vandaag</p><div class="bar"><i style="width:${L.games.filter(g=>t[g]!=null).length/L.games.length*100}%"></i></div>
+ ${L.games.map(g=>`<div class="gc ${t[g]!=null?'done':''}"><div class="art a-${g}">${GAMES[g][1]}</div><div class="gb"><h3>${GAMES[g][0]}</h3><p class="mute">${DESC[g]}</p><div class="gr"><button onclick="start('${g}')">${t[g]!=null?'↻ Opnieuw':'▶ Start'}</button><b>${t[g]!=null?lab(g,t[g]):''}</b></div></div></div>`).join('')}
+ <div class="card" id="st">${stoolBox()}</div>
+ <p class="mute">Geen diagnose. Bij klachten of twijfel: bel altijd je arts.</p>${tabs('home')}`}
+function stats(m){stop();const L=LEVELS[LV],col=s=>s>=L.ok?'ok':s>=L.warn?'warn':'bad';let rows=[];
+ if(m==='dag')rows=Object.keys(H).filter(d=>total(d)!=null).sort().slice(-14).map(d=>[d.slice(8)+'-'+d.slice(5,7),total(d)]);
+ else{const by={},s0=new Date();s0.setHours(0,0,0,0);LG.filter(x=>x.t>=s0.getTime()).forEach(x=>{const h=new Date(x.t).getHours();(by[h]=by[h]||[]).push(x.s)});rows=Object.keys(by).sort((a,b)=>a-b).map(h=>[String(h).padStart(2,'0')+':00',avg(by[h])])}
+ const last=rows.length?rows[rows.length-1]:null,prev=rows.length>1?rows[rows.length-2][1]:null;
+ let now='';if(last){const d=prev==null?0:last[1]-prev,[a,c]=arr(d);now=`<div class="card"><div class="mute">Waar ben ik nu?</div><div class="nb" style="color:var(--${col(last[1])})">${Math.round(last[1])}<span style="color:var(--${c})">${a}</span></div><b>${lab('x',last[1])}</b><div class="mute">${prev==null?'Nog niets om mee te vergelijken':(d>=0?'+':'')+Math.round(d)+' ten opzichte van '+(m==='dag'?'de vorige dag':'het vorige uur')}</div></div>`}
+ const gl=L.games.map(g=>{const a=LG.filter(x=>x.g===g).slice(-2);if(!a.length)return '';const s=a[a.length-1].s,d=a.length>1?s-a[0].s:0,[ar,c]=arr(d);return `<div class="rw"><span>${GAMES[g][1]} ${GAMES[g][0]}</span><b>${g==='dieren'?Math.round(s/5)+' dieren':s}</b><b style="color:var(--${c})">${ar}</b></div>`}).join('');
+ const bars=rows.map((r,i)=>[r,i?r[1]-rows[i-1][1]:0,i===rows.length-1]).reverse().map(([r,d,nu])=>{const [a,c]=arr(d);return `<div class="br"><span class="bl">${r[0]}</span><div class="bt"><i style="width:${Math.max(4,r[1])}%;background:var(--${col(r[1])})"></i></div><b style="width:28px;text-align:right">${Math.round(r[1])}</b><b style="color:var(--${c});width:16px">${a}</b>${nu?'<span class="nu">nu</span>':''}</div>`}).join('');
+ $.innerHTML=`<header class="top"><b>📊 Statistieken</b></header><div class="yn"><button class="${m==='dag'?'':'alt'}" onclick="stats('dag')">Per dag</button><button class="${m==='uur'?'':'alt'}" onclick="stats('uur')">Per uur</button></div>${now}${stoolCard()}<div class="card"><h2>Per spelletje</h2>${gl||'<p class="mute">Nog geen metingen.</p>'}</div><div class="card"><h2>${m==='dag'?'Per dag':'Vandaag per uur'}</h2>${bars||'<p class="mute">Nog geen metingen.</p>'}<p class="mute">▲ beter, ▼ lager, ▶ gelijk</p></div>${tabs('stats')}`}
+function inst(){stop();$.innerHTML=`<header class="top"><b>⚙️ Instellingen</b></header><div class="card"><h2>${NM}</h2><p class="mute">${EM}${DZ?' · '+DZ:''}</p><h2>${LEVELS[LV].naam}</h2><p class="mute">${LEVELS[LV].uitleg}</p><button class="alt" onclick="intake()">Vragen opnieuw invullen</button><button class="alt" onclick="NM='';try{localStorage.setItem(KEY+'-nm','')}catch(e){}home()">Naam wijzigen</button></div><div class="card"><h2>Taal / Language</h2><div class="lgi">${LANGBTN('inst')}</div></div><div class="card"><div id="rs"><button class="alt" onclick="askReset()">Scores wissen</button></div></div><p class="mute">Geen diagnose. Bij klachten of twijfel: bel altijd je arts.</p>${tabs('inst')}`}
+let FL=null,SP=true;
+const LG0='Lever<span style="color:#22b8ff">Helder</span>';
+const nameCard=()=>NM?'':`<div class="card"><p>Hoe heet je?</p><input id="nm" maxlength="20" placeholder="Jouw naam" style="width:100%;font:inherit;padding:14px;border-radius:12px;border:2px solid var(--line);background:var(--bg);color:var(--ink)"><button onclick="setNm()">Opslaan</button></div>`;
+function tabs(a){return `<nav class="tabs">${[['home()','home','🏠','Home'],['results()','res','📊','Resultaten'],['tips()','info','ℹ️','Info']].map(t=>`<button class="${a===t[1]?'on':''}" onclick="${t[0]}"><span>${t[2]}</span>${t[3]}</button>`).join('')}</nav>`}
+function splash(){$.innerHTML=`<div class="sp"><div class="lg">${LANGBTN('splash')}</div><div class="spb">🧠</div><h1 class="spt">${LG0}</h1><p class="spp">Meet je sufheid.<br>Blijf alert.<br>Leef gezonder.</p><div class="spf"><button onclick="SP=false;startFlow()">${LV?'Start test':'Snel starten'} →</button><button class="alt" onclick="SP=false;tips()">Meer informatie</button><p class="mute" style="text-align:center;margin-top:14px">🛡 Voor jouw veiligheid</p></div></div>`}
+function home(){stop();if(SP)return splash();if(!LV)return intake();
+ $.innerHTML=`<header class="top"><b style="font-size:26px">${LG0}</b><button class="gear" onclick="inst()">⚙️</button></header><div class="card prof"><div class="av">${(NM||'G')[0].toUpperCase()}</div><div><h2 style="margin:0 0 4px">${greet()}, ${NM||'welkom'}</h2><span class="chip">${PERS?LEVELS[LV].naam:'Standaard test'}</span><div class="mute" style="margin-top:4px">🔥 ${streak()} dagen op rij</div></div></div><p>Hoe voel je je vandaag?</p>
+ <div class="card"><div style="display:flex;gap:14px;align-items:center"><div class="ico big">😴</div><div><h2 style="margin:0">Sufheid test</h2><p class="mute" style="margin:0">Test je alertheid in minder dan 2 minuten.</p></div></div><button onclick="startFlow()">Start test →</button></div>
+ <div class="card"><h2>Mijn scores</h2>${chart()}${scoreTiles()}</div>
+ <button class="row2" onclick="results()"><span class="ico">📊</span><span><b>Mijn resultaten</b><small>Bekijk je eerdere scores</small></span><i>›</i></button>
+ <button class="row2" onclick="tips()"><span class="ico">🌱</span><span><b>Tips &amp; advies</b><small>Hoe blijf je alert?</small></span><i>›</i></button>
+ ${PERS?'':`<div class="card"><h2>Persoonlijke intake</h2><p class="mute">Ongeveer 2 minuten. Zo begin je veilig en past de app zich aan jou aan. Geen diagnose.</p><button class="alt" onclick="intake()">Start de intake</button></div>`}
+ <button class="row2" onclick="acct()"><span class="ico">🛡</span><span><b>Account (optioneel)</b><small>Alles staat nu op deze telefoon</small></span><i>›</i></button>
+ <div class="card" id="st">${stoolBox()}</div>${tabs('home')}`}
+function startFlow(){if(!LV)return intake();FL={i:0};const gs=LEVELS[LV].games;
+ $.innerHTML=`<header class="top"><button class="gear" onclick="FL=null;home()">‹</button><b>Sufheid test</b><span style="width:44px"></span></header><div class="steps">${gs.map((g,i)=>(i?'<span class="ln"></span>':'')+`<span class="st ${i?'':'on'}">${i+1}</span>`).join('')}</div><h1 style="text-align:center">Klaar?</h1><p style="text-align:center">Je krijgt straks ${gs.length} korte spelletjes. Doe ze rustig en zo goed mogelijk.</p><div class="hand">👆</div><button onclick="start(LEVELS[LV].games[0])">Start →</button><p class="mute" style="text-align:center">Duur: ongeveer ${gs.length} minuten</p>`}
+function finish(g,score,detail){const t=today();H[t]=H[t]||{};H[t][g]=score;LG.push({t:Date.now(),g,s:score});save();
+ if(FL){FL.i++;const gs=LEVELS[LV].games;if(FL.i<gs.length)return start(gs[FL.i]);FL=null}details()}
+function details(){const n=total(today()),v=verdict(n);
+ const adv={ok:'Neem regelmatig pauzes, zorg voor voldoende slaap en blijf gehydrateerd.',warn:'Rust even uit en probeer het over een uur opnieuw. De test is niet 100% zeker.',bad:'Probeer het over een uur opnieuw. Voel je je suf of verward? Neem dan contact op met je arts.'}[v.k],txt={ok:'Je scores zijn op dit moment goed. Je blijft alert, maar let op bij vermoeidheid.',warn:'Je score is lager dan normaal.',bad:'Je score is laag.'}[v.k];
+ $.innerHTML=`<header class="top"><button class="gear" onclick="home()">‹</button><b>Details</b><span style="width:44px"></span></header>${ring(n,v.k,190)}<p style="text-align:center;margin:8px 0 0">Alertheidsscore</p><h1 style="text-align:center;color:var(--${v.k})">${v.t.split(':')[0]}</h1><p style="text-align:center">${txt}</p><p class="mute" style="text-align:center">Bewaard op deze telefoon.</p><div class="card"><b>💡 Advies</b><p class="mute" style="margin-top:6px">${adv}</p></div><button onclick="startFlow()">↻ Nieuwe test</button>`}
+function results(){stop();const L=LEVELS[LV],ks=Object.keys(H).filter(d=>total(d)!=null).sort(),k=ks[ks.length-1],n=k?total(k):null,v=n!=null?verdict(n):null;
+ const pr=ks.length>1?total(ks[ks.length-2]):null,[a,c]=arr(pr==null||n==null?0:n-pr),lastOf=g=>{const x=LG.filter(y=>y.g===g);return x.length?x[x.length-1].s:null};
+ $.innerHTML=`<header class="top"><b style="font-size:26px">Resultaten</b></header><div class="card" style="display:flex;gap:14px;align-items:center"><div style="width:100px;flex:none">${ring(n,v&&v.k,100)}</div><div><div>Alertheidsscore</div><h2 style="color:var(--${v?v.k:'mute'});margin:0">${v?v.t.split(':')[0]:'Nog geen test'} <span style="color:var(--${c})">${a}</span></h2></div></div>
+ <div class="card"><h2>Overzicht</h2><div class="ov">${L.games.map(g=>{const s=lastOf(g);return `<div><div class="ico">${GAMES[g][1]}</div>${GAMES[g][0]}<br><b style="font-size:20px">${s==null?'–':g==='dieren'?Math.round(s/5):s}</b></div>`}).join('')}</div></div>
+ <div class="card"><h2>Je score de afgelopen dagen</h2>${chart()}</div>${gameCharts()}
+ <button class="row2" onclick="history()"><span class="ico">🕘</span><span><b>Geschiedenis</b></span><i>›</i></button><button class="row2" onclick="stats('dag')"><span class="ico">📈</span><span><b>Per dag en per uur</b></span><i>›</i></button><button class="row2" onclick="arts()"><span class="ico">🩺</span><span><b>Overzicht voor mijn arts</b><small>Alle scores op één pagina</small></span><i>›</i></button>${stoolCard()}${tabs('res')}`}
+function history(){stop();const L=LEVELS[LV],ks=Object.keys(H).filter(d=>total(d)!=null).sort().reverse(),col=s=>s>=L.ok?'ok':s>=L.warn?'warn':'bad';
+ $.innerHTML=`<header class="top"><b style="font-size:26px">Geschiedenis</b></header>${ks.length?ks.map(d=>{const s=total(d),k=col(s),dt=new Date(d+'T12:00:00').toLocaleDateString('nl-NL',{day:'numeric',month:'short',year:'numeric'});return `<div class="row2"><span class="mini">${ring(s,k,52)}</span><span><small>${dt}</small><b style="color:var(--${k})">${{ok:'Goed',warn:'Let op',bad:'Niet goed'}[k]}</b></span></div>`}).join(''):'<p class="mute">Nog geen metingen.</p>'}${tabs('res')}`}
+function tips(){stop();const T=[['🛏','Voldoende slaap','Slaap 7 tot 9 uur per nacht en houd een vast ritme.'],['💊','Medicijnen','Neem je medicijnen zoals je arts heeft verteld.'],['🚫','Geen alcohol','Alcohol is slecht voor je lever en kan je sufheid erger maken.'],['🚽','Regelmatige ontlasting','Meestal helpt 2 tot 3 keer per dag tegen sufheid.'],['❤️','Gezonde levensstijl','Eet gezond, beweeg en vermijd stress.']];
+ $.innerHTML=`<header class="top"><b style="font-size:26px">Tips &amp; advies</b></header>${T.map(t=>`<div class="row2"><span class="ico">${t[0]}</span><span><b>${t[1]}</b><small>${t[2]}</small></span></div>`).join('')}<button onclick="home()">🏠 Terug naar home</button>${tabs('info')}`}
+const days7=()=>{const a=[];for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);a.push(d.toISOString().slice(0,10))}return a};
+const dl=k=>['Zo','Ma','Di','Wo','Do','Vr','Za'][new Date(k+'T12:00:00').getDay()];
+function lineChart(id,vals,labs,max=100,ticks=[10,40,70,100]){const W=320,Ht=170,pl=30,pr=12,pt=10,pb=26,n=vals.length,x=i=>pl+i*(W-pl-pr)/(n-1),y=v=>pt+(1-v/max)*(Ht-pt-pb);
+ let d='',ar='',run=[];const flush=()=>{if(run.length>1){let p=`M${x(run[0][0])},${y(run[0][1])}`;for(let j=1;j<run.length;j++){const a=run[j-1],b=run[j],m=(x(a[0])+x(b[0]))/2;p+=` C${m},${y(a[1])} ${m},${y(b[1])} ${x(b[0])},${y(b[1])}`}d+=p;ar+=p+` L${x(run[run.length-1][0])},${y(0)} L${x(run[0][0])},${y(0)} Z`}run=[]};
+ vals.forEach((v,i)=>{if(v==null)flush();else run.push([i,v])});flush();
+ return `<svg viewBox="0 0 ${W} ${Ht}"><defs><linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--ok);stop-opacity:.35"/><stop offset="1" style="stop-color:var(--ok);stop-opacity:0"/></linearGradient></defs>${ticks.map(t=>`<line x1="${pl}" x2="${W-pr}" y1="${y(t)}" y2="${y(t)}" stroke="var(--line)"/><text x="0" y="${y(t)+4}" font-size="11" fill="var(--mute)">${t}</text>`).join('')}<path d="${ar}" fill="url(#${id})"/><path d="${d}" fill="none" stroke="var(--ok)" stroke-width="3" stroke-linecap="round"/>${vals.map((v,i)=>v==null?'':`<circle cx="${x(i)}" cy="${y(v)}" r="4" fill="var(--ok)"/>`).join('')}${labs.map((l,i)=>`<text x="${x(i)}" y="${Ht-6}" font-size="11" text-anchor="middle" fill="var(--mute)">${l}</text>`).join('')}</svg>`}
+function chart(){const D=days7(),v=D.map(d=>total(d)==null?null:Math.round(total(d)));return v.some(x=>x!=null)?lineChart('gA',v,D.map(dl)):'<p class="mute">Nog geen metingen.</p>'}
+function gameCharts(){const D=days7(),lab=D.map(dl),has=a=>a.some(v=>v!=null);
+ const cards=LEVELS[LV].games.map(g=>{const dz=g==='dieren',vals=D.map(d=>H[d]&&H[d][g]!=null?(dz?Math.round(H[d][g]/5):H[d][g]):null);
+  return `<div class="card"><h2>${GAMES[g][1]} ${GAMES[g][0]}</h2><p class="mute">${dz?'Aantal dieren per dag':'Score per dag'}</p>${has(vals)?lineChart('g'+g,vals,lab,dz?20:100,dz?[5,10,15,20]:[10,40,70,100]):'<p class="mute">Nog geen metingen.</p>'}</div>`}).join('');
+ const sv=D.map(d=>ST[d]==null?null:ST[d]);
+ return cards+`<div class="card"><h2>🚽 Ontlasting</h2><p class="mute">Aantal keer per dag</p>${has(sv)?lineChart('gS',sv,lab,6,[0,2,4,6]):'<p class="mute">Nog niets bijgehouden.</p>'}</div>`}
+function intake(){stop();SP=false;I={i:0,p:0,tx:false};
+ $.innerHTML=`<h1>Maak je profiel</h1><p>Vul je naam in en beantwoord 5 korte vragen. Dan kiest de app de juiste groep en de juiste spelletjes voor jou.</p><div class="card"><p>Hoe heet je?</p><input id="nm" maxlength="20" value="${NM}" placeholder="Jouw naam" style="width:100%;font:inherit;padding:14px;border-radius:12px;border:2px solid var(--line);background:var(--bg);color:var(--ink)"></div><button onclick="NM=(document.getElementById('nm').value||'').trim().slice(0,20);try{localStorage.setItem(KEY+'-nm',NM)}catch(e){}ask()">Start de vragen</button><p class="mute" style="margin-top:14px">Dit is een hulpmiddel en geen diagnose.</p>`}
+function scoreTiles(){const L=LEVELS[LV],last=g=>{const x=LG.filter(y=>y.g===g);return x.length?x[x.length-1].s:null};
+ return `<div class="ov" style="margin-top:12px;grid-template-columns:repeat(auto-fit,minmax(80px,1fr))">${L.games.map(g=>{const s=last(g),k=s==null?null:s>=L.ok?'ok':s>=L.warn?'warn':'bad';return `<div>${ring(s,k,64,g==='dieren'&&s!=null?Math.round(s/5):null)}${GAMES[g][0]}<br><small style="color:var(--mute)">${s==null?'nog niet gedaan':g==='dieren'?'dieren':'score'}</small></div>`}).join('')}</div>`}
+let DZ='',EM='';try{DZ=localStorage.getItem(KEY+'-dz')||'';EM=localStorage.getItem(KEY+'-em')||''}catch(e){}
+const INP='width:100%;font:inherit;padding:14px;border-radius:12px;border:2px solid var(--line);background:var(--bg);color:var(--ink)';
+function intake(){stop();SP=false;I={i:0,p:0,tx:false};
+ $.innerHTML=`<h1>Maak je account</h1><p>Zo bewaart de app jouw gegevens en kan hij jou daarna de juiste vragen stellen.</p><div class="card"><p>Naam</p><input id="nm" maxlength="20" value="${NM}" placeholder="Jouw naam" style="${INP}"><p style="margin-top:14px">E-mailadres</p><input id="em" type="email" value="${EM}" placeholder="naam@voorbeeld.nl" style="${INP}"><label style="display:flex;gap:10px;align-items:flex-start;margin-top:16px"><input id="ok" type="checkbox" style="width:24px;height:24px;flex:none"><span class="mute">Ik snap dat deze app geen diagnose stelt en een arts niet vervangt.</span></label></div><p id="er" style="color:var(--bad)"></p><button onclick="signUp()">Account maken</button><p class="mute" style="margin-top:14px">Je gegevens blijven op dit apparaat staan.</p>`}
+function signUp(){const n=document.getElementById('nm').value.trim(),e=document.getElementById('em').value.trim();
+ if(!n||!/.+@.+\..+/.test(e)||!document.getElementById('ok').checked){document.getElementById('er').textContent='Vul je naam en e-mailadres in en vink het vakje aan.';return}
+ NM=n.slice(0,20);EM=e;try{localStorage.setItem(KEY+'-nm',NM);localStorage.setItem(KEY+'-em',EM)}catch(x){}dz()}
+function dz(){$.innerHTML=`<div class="prog">Over je ziekte</div><div class="bar"><i style="width:0%"></i></div><h1>Welke leverziekte heb je?</h1>${['Levercirrose','Hepatitis (ontsteking)','Een andere leverziekte','Weet ik niet'].map(x=>`<button class="alt" onclick="setDz('${x}')">${x}</button>`).join('')}`}
+function setDz(x){DZ=x;try{localStorage.setItem(KEY+'-dz',x)}catch(e){}ask()}
+function intake(){stop();SP=false;I={i:0,p:0,tx:false};
+ $.innerHTML=`<h1>Welkom! Hoe heet je?</h1><p class="mute">Alleen je naam is genoeg. Daarna volgen 6 snelle vragen.</p><input id="nm" maxlength="20" value="${NM}" placeholder="Jouw naam" autocomplete="given-name" style="${INP};font-size:22px;margin-bottom:12px"><button onclick="signUp()">Starten →</button><button class="alt" onclick="home()">Nu niet</button><p class="mute" style="margin-top:14px">Geen diagnose. Je gegevens blijven op dit apparaat.</p>`;
+ const i=document.getElementById('nm');i.onkeydown=e=>{if(e.key==='Enter')signUp()};setTimeout(()=>i.focus(),50)}
+function signUp(){NM=(document.getElementById('nm').value||'').trim().slice(0,20)||'Gast';try{localStorage.setItem(KEY+'-nm',NM)}catch(x){}dz()}
+function copyTxt(){const m=document.getElementById('cp'),f='Kopiëren lukt hier niet. Maak een screenshot.';try{navigator.clipboard.writeText(window.TXT).then(()=>m.textContent='Gekopieerd.',()=>m.textContent=f)}catch(e){m.textContent=f}}
+function arts(){stop();const L=LEVELS[LV],col=s=>s>=L.ok?'ok':s>=L.warn?'warn':'bad',
+ ks=[...new Set([...Object.keys(H).filter(d=>total(d)!=null),...Object.keys(ST)])].sort().reverse().slice(0,30),
+ c=(d,g)=>H[d]&&H[d][g]!=null?(g==='dieren'?Math.round(H[d][g]/5):H[d][g]):'–',
+ tot=ks.map(d=>total(d)).filter(x=>x!=null),dz7=ks.slice(0,7).map(d=>c(d,'dieren')).filter(x=>x!=='–'),st7=ks.slice(0,7).filter(d=>ST[d]!=null).map(d=>ST[d]),
+ mean=a=>a.length?(a.reduce((s,x)=>s+x,0)/a.length).toFixed(1):'–',dd=d=>d.slice(8)+'-'+d.slice(5,7),
+ lines=ks.map(d=>`${dd(d)}: ${L.games.map(g=>GAMES[g][0]+' '+c(d,g)).join(', ')}, gemiddeld ${total(d)==null?'–':Math.round(total(d))}, ontlasting ${ST[d]==null?'–':ST[d]}`);
+ window.TXT=`LeverHelder overzicht van ${NM||'patiënt'}\n${DZ?DZ+', ':''}${L.naam}\nDatum: ${new Date().toLocaleDateString('nl-NL')}\n\n`+lines.join('\n')+'\n\nDierentest: 15 of meer is normaal. Geen diagnose.';
+ $.innerHTML=`<header class="top"><button class="gear" onclick="results()">‹</button><b>Overzicht voor mijn arts</b><span style="width:44px"></span></header>
+ <div class="card"><h2>${NM||'Patiënt'}</h2><p class="mute" style="margin:0">${DZ?DZ+' · ':''}${L.naam}<br>Datum: ${new Date().toLocaleDateString('nl-NL')}</p></div>
+ <div class="card"><h2>Samenvatting (laatste 7 dagen)</h2><div class="rw"><span>Gemiddelde score</span><b>${mean(tot.slice(0,7))}</b></div><div class="rw"><span>Gemiddeld aantal dieren</span><b>${mean(dz7.map(Number))}</b></div><div class="rw"><span>Ontlasting per dag</span><b>${mean(st7)}</b></div><div class="rw"><span>Dagen met meting</span><b>${tot.length}</b></div></div>
+ <div class="card"><h2>Score per dag</h2>${chart()}</div>
+ <div class="card" style="overflow-x:auto"><h2>Alle scores</h2>${ks.length?`<table class="tb"><tr><th>Dag</th>${L.games.map(g=>`<th>${GAMES[g][1]}</th>`).join('')}<th>Gem.</th><th>🚽</th></tr>${ks.map(d=>{const t=total(d);return `<tr><td>${dd(d)}</td>${L.games.map(g=>`<td>${c(d,g)}</td>`).join('')}<td style="font-weight:700;color:var(--${t==null?'mute':col(t)})">${t==null?'–':Math.round(t)}</td><td>${ST[d]==null?'–':ST[d]}</td></tr>`}).join('')}</table><p class="mute">🐘 aantal dieren in 1 minuut (15 of meer is normaal). Andere spelletjes: score van 0 tot 100. 🚽 aantal keer ontlasting.</p>`:'<p class="mute">Nog geen metingen.</p>'}</div>
+ <p class="mute">Gemaakt met LeverHelder. Dit is geen diagnose.</p>
+ <button onclick="try{window.print()}catch(e){}">🖨 Print of bewaar als PDF</button><button class="alt" onclick="copyTxt()">Kopieer als tekst</button><p class="mute" id="cp"></p>${tabs('res')}`}
+const ICONS={brain:'<path d="M9 4a3 3 0 0 0-3 3 3 3 0 0 0-2 3 3 3 0 0 0 1 4 3 3 0 0 0 4 4zM15 4a3 3 0 0 1 3 3 3 3 0 0 1 2 3 3 3 0 0 1-1 4 3 3 0 0 1-4 4z"/><path d="M9 9h1.5M15 9h-1.5M9 14h1.5M15 14h-1.5"/>',sleep:'<path d="M19 14A8 8 0 1 1 9 4a6 6 0 0 0 10 10z"/><path d="M14 3h4l-4 4h4"/>',bars:'<path d="M5 20V10M12 20V4M19 20v-7"/>',leaf:'<path d="M5 19c0-9 5-14 15-14 0 10-5 15-14 15zM5 19l7-7"/>',clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',line:'<path d="M3 17l5-6 4 3 8-9M16 5h4v4"/>',steth:'<path d="M6 3v6a4 4 0 0 0 8 0V3M10 13v2a5 5 0 0 0 10 0v-2"/><circle cx="20" cy="11" r="2"/>',paw:'<circle cx="7" cy="10" r="2"/><circle cx="12" cy="6.5" r="2"/><circle cx="17" cy="10" r="2"/><path d="M12 12c-3 0-5 3-5 5s2 3 5 2c3 1 5 0 5-2s-2-5-5-5z"/>',palette:'<circle cx="9" cy="9" r="5"/><circle cx="15" cy="9" r="5"/><circle cx="12" cy="15" r="5"/>',bolt:'<path d="M13 2L5 14h6l-1 8 8-12h-6z"/>',digits:'<rect x="3" y="5" width="18" height="14" rx="3"/><path d="M8 10v4M12 10v4M16 10v4"/>',drop:'<path d="M12 3c4 5 6 8 6 11a6 6 0 0 1-12 0c0-3 2-6 6-11z"/>',flame:'<path d="M12 3c1 4 5 6 5 11a5 5 0 0 1-10 0c0-3 2-4 2-7 2 1 3 3 3 3 0-3-1-5 0-7z"/>',home:'<path d="M4 11l8-7 8 7v9h-5v-6H9v6H4z"/>',gear:'<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/>',info:'<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/>',shield:'<path d="M12 3l8 3v6c0 5-4 8-8 9-4-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/>',tap:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/>',bulb:'<path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10c1 1 1 3 1 3h6s0-2 1-3a6 6 0 0 0-4-10z"/>',pill:'<rect x="3" y="8" width="18" height="8" rx="4" transform="rotate(-45 12 12)"/><path d="M9 9l6 6"/>',nosign:'<circle cx="12" cy="12" r="9"/><path d="M5.6 5.6l12.8 12.8"/>',heart:'<path d="M12 20s-8-5-8-11a4.5 4.5 0 0 1 8-2 4.5 4.5 0 0 1 8 2c0 6-8 11-8 11z"/>',bed:'<path d="M3 18V7M3 14h18v4M21 14v-2a3 3 0 0 0-3-3h-7v5"/><circle cx="7" cy="11" r="1.5"/>',printer:'<path d="M7 9V3h10v6M7 17H4v-7h16v7h-3"/><rect x="7" y="14" width="10" height="7"/>',play:'<path d="M7 4l13 8-13 8z" fill="currentColor"/>',redo:'<path d="M20 12a8 8 0 1 1-3-6M20 4v5h-5"/>',checkc:'<circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/>'};
+const EM_MAP={'🧠':'brain','😴':'sleep','📊':'bars','🌱':'leaf','🕘':'clock','📈':'line','🩺':'steth','🐘':'paw','🎨':'palette','⚡':'bolt','🔢':'digits','🚽':'drop','🔥':'flame','🏠':'home','⚙':'gear','ℹ':'info','🛡':'shield','👆':'tap','💡':'bulb','💊':'pill','🚫':'nosign','❤':'heart','🛏':'bed','🖨':'printer','▶':'play','↻':'redo','✅':'checkc','🟢':'dotok','🟠':'dotwarn','🔴':'dotbad'};
+const EM_RE=new RegExp('('+Object.keys(EM_MAP).join('|')+')\ufe0f?','gu');
+const mkSvg=n=>`<svg viewBox="0 0 24 24" fill="${DUO.has(n)?'currentColor':'none'}" fill-opacity=".16" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">${n.startsWith('dot')?`<circle cx="12" cy="12" r="7" stroke="none" style="fill:var(--${n.slice(3)})"/>`:ICONS[n]}</svg>`;
+function skin(root){const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT),L=[];while(w.nextNode())L.push(w.currentNode);
+ L.forEach(t=>{const v=t.nodeValue;EM_RE.lastIndex=0;if(!EM_RE.test(v))return;EM_RE.lastIndex=0;const f=document.createDocumentFragment();let i=0,m;
+  while((m=EM_RE.exec(v))){f.appendChild(document.createTextNode(v.slice(i,m.index)));const s=document.createElement('span');s.className='ei';s.innerHTML=mkSvg(EM_MAP[m[1]]);f.appendChild(s);i=m.index+m[0].length}
+  f.appendChild(document.createTextNode(v.slice(i)));t.parentNode.replaceChild(f,t)})}
+new MutationObserver(()=>skin($)).observe($,{childList:true,subtree:true});
+const DUO=new Set(['heart','drop','flame','sleep','bolt','shield','bulb','leaf','home','paw','palette','pill','info','nosign','checkc','tap','clock']);
+Object.assign(ICONS,{
+brain:`<path d='M12 18V5'/><path d='M15 13a4.17 4.17 0 0 1-3-4 4.17 4.17 0 0 1-3 4'/><path d='M17.6 6.5A3 3 0 1 0 12 5a3 3 0 1 0-5.6 1.5'/><path d='M18 5.1a4 4 0 0 1 2.5 5.8'/><path d='M18 18a4 4 0 0 0 2-7.5'/><path d='M20 17.5A4 4 0 1 1 12 18a4 4 0 1 1-8-.5'/><path d='M6 18a4 4 0 0 1-2-7.5'/><path d='M6 5.1a4 4 0 0 0-2.5 5.8'/>`,
+sleep:`<path d='M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z'/>`,
+bars:`<path d='M3 3v16a2 2 0 0 0 2 2h16'/><path d='M18 17V9M13 17V5M8 17v-3'/>`,
+leaf:`<path d='M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.5 19 2c1 2 2 4.2 2 8 0 5.5-4.8 10-10 10Z'/><path d='M2 21c0-3 1.9-5.4 5.1-6C9.5 14.5 12 13 13 12'/>`,
+clock:`<circle cx='12' cy='12' r='10'/><path d='M12 6v6l4 2'/>`,
+line:`<path d='M16 7h6v6'/><path d='m22 7-8.5 8.5-5-5L2 17'/>`,
+steth:`<path d='M11 2v2M5 2v2M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1'/><path d='M8 15a6 6 0 0 0 12 0v-3'/><circle cx='20' cy='10' r='2'/>`,
+paw:`<circle cx='11' cy='4' r='2'/><circle cx='18' cy='8' r='2'/><circle cx='20' cy='16' r='2'/><path d='M9 10a5 5 0 0 1 5 5v3.5a3.5 3.5 0 0 1-6.8 1Q6.5 17.5 4.5 16.8A3.5 3.5 0 0 1 5.5 10Z'/>`,
+palette:`<path d='M12 22a1 1 0 0 1 0-20 10 9 0 0 1 10 9 5 5 0 0 1-5 5h-2.25a1.75 1.75 0 0 0-1.4 2.8l.3.4A1.75 1.75 0 0 1 12 22z'/><circle cx='13.5' cy='6.5' r='.6'/><circle cx='17.5' cy='10.5' r='.6'/><circle cx='6.5' cy='12.5' r='.6'/><circle cx='8.5' cy='7.5' r='.6'/>`,
+bolt:`<path d='M4 14a1 1 0 0 1-.8-1.6l9.9-10.2a.5.5 0 0 1 .9.5l-1.9 6A1 1 0 0 0 13 10h7a1 1 0 0 1 .8 1.6l-9.9 10.2a.5.5 0 0 1-.9-.5l1.9-6A1 1 0 0 0 11 14z'/>`,
+digits:`<path d='M4 9h16M4 15h16M10 3 8 21M16 3l-2 18'/>`,
+drop:`<path d='M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z'/>`,
+flame:`<path d='M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.4-.5-2-1-3-1.1-2.1-.2-4.1 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.2.4-2.3 1-3a2.5 2.5 0 0 0 2.5 2.5z'/>`,
+home:`<path d='M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8'/><path d='M3 10a2 2 0 0 1 .7-1.5l7-6a2 2 0 0 1 2.6 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z'/>`,
+gear:`<path d='M21 4h-7M10 4H3M21 12h-9M8 12H3M21 20h-5M12 20H3M14 2v4M8 10v4M16 18v4'/>`,
+info:`<circle cx='12' cy='12' r='10'/><path d='M12 16v-4M12 8h.01'/>`,
+shield:`<path d='M20 13c0 5-3.5 7.5-7.7 9a1 1 0 0 1-.7 0C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.2-2.7a1.2 1.2 0 0 1 1.5 0C14.5 3.8 17 5 19 5a1 1 0 0 1 1 1z'/><path d='m9 12 2 2 4-4'/>`,
+tap:`<circle cx='12' cy='12' r='10'/><circle cx='12' cy='12' r='5.5'/><circle cx='12' cy='12' r='1.5' fill='currentColor' fill-opacity='1'/>`,
+bulb:`<path d='M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5'/><path d='M9 18h6M10 22h4'/>`,
+pill:`<path d='m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z'/><path d='m8.5 8.5 7 7'/>`,
+nosign:`<circle cx='12' cy='12' r='10'/><path d='m4.9 4.9 14.2 14.2'/>`,
+heart:`<path d='M19 14c1.5-1.5 3-3.2 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.8 0-3 .5-4.5 2-1.5-1.5-2.7-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4 3 5.5l7 7Z'/>`,
+bed:`<path d='M2 4v16M2 8h18a2 2 0 0 1 2 2v10M2 17h20M6 8v9'/>`,
+printer:`<path d='M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2'/><path d='M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6'/><rect x='6' y='14' width='12' height='8' rx='1'/>`,
+play:`<path d='M6 3l14 9-14 9z' fill='currentColor' fill-opacity='1'/>`,
+redo:`<path d='M21 12a9 9 0 1 1-9-9c2.5 0 4.9 1 6.7 2.7L21 8'/><path d='M21 3v5h-5'/>`,
+checkc:`<circle cx='12' cy='12' r='10'/><path d='m9 12 2 2 4-4'/>`});
+let PERS=false;try{PERS=localStorage.getItem(KEY+'-pers')==='1'||!!LV}catch(e){PERS=!!LV}
+if(!LV)LV=2;
+function acct(){stop();const code=btoa(unescape(encodeURIComponent(JSON.stringify({H,LG,ST,LV,NM,DZ,PERS}))));
+ $.innerHTML=`<header class="top"><button class="gear" onclick="home()">‹</button><b>Account (optioneel)</b><span style="width:44px"></span></header>
+ <div class="card"><h2>Je gebruikt de app zonder account</h2><p class="mute">Je hoeft niets aan te maken. Je resultaten staan op deze telefoon en blijven daar bewaard.</p></div>
+ <div class="card"><h2>Op een ander toestel kijken?</h2><p class="mute">Kopieer deze code en plak hem op je andere toestel. Dan staan je resultaten daar ook.</p><textarea id="cd" readonly style="${INP};height:90px;font-size:12px">${code}</textarea><button onclick="cpCode()">Kopieer code</button><p class="mute" id="cm"></p><p style="margin-top:14px">Code van een ander toestel plakken</p><textarea id="ci" style="${INP};height:90px;font-size:12px" placeholder="Plak hier je code"></textarea><button class="alt" onclick="loadCode()">Laad gegevens</button><p class="mute" id="cl"></p></div>
+ <div class="card"><h2>Account met inloggen</h2><p class="mute">Automatisch synchroniseren met een account komt later. Daar is een server voor nodig, en die is er in deze versie nog niet.</p></div>${tabs('home')}`}
+function cpCode(){const m=document.getElementById('cm'),t=document.getElementById('cd'),f='Houd de code ingedrukt om te kopiëren.';t.select();try{navigator.clipboard.writeText(t.value).then(()=>m.textContent='Gekopieerd.',()=>m.textContent=f)}catch(e){m.textContent=f}}
+function loadCode(){const m=document.getElementById('cl');try{const o=JSON.parse(decodeURIComponent(escape(atob(document.getElementById('ci').value.trim()))));if(!o||typeof o.H!=='object')throw 0;
+ Object.keys(o.H).forEach(d=>{H[d]=Object.assign({},H[d],o.H[d])});
+ const seen=new Set(LG.map(x=>x.t+x.g));(o.LG||[]).forEach(x=>{if(!seen.has(x.t+x.g))LG.push(x)});LG.sort((a,b)=>a.t-b.t);
+ Object.assign(ST,o.ST||{});if(o.NM&&!NM)NM=o.NM;if(o.DZ&&!DZ)DZ=o.DZ;if(o.PERS&&!PERS){PERS=true;LV=o.LV||LV;try{localStorage.setItem(KEY+'-pers','1')}catch(e){}}
+ save();try{localStorage.setItem(KEY+'-nm',NM);localStorage.setItem(KEY+'-dz',DZ)}catch(e){}m.textContent='Gelukt: je gegevens zijn toegevoegd.'}catch(e){m.textContent='Deze code werkt niet. Kopieer hem opnieuw.'}}
+const IQS=[
+{k:'now',t:'Hoe voel je je op dit moment?',o:['Helder en alert','Wat moe, maar normaal','Suf, verward of heel slaperig']},
+{k:'sleep',t:"Slaap je overdag veel en ben je 's nachts wakker?",o:['Nee','Soms','Ja, vaak']},
+{k:'dz',t:'Welke leverziekte heb je?',o:['Levercirrose','Hepatitis (ontsteking)','Een andere leverziekte','Weet ik niet']},
+{k:'tx',t:'Sta je op de wachtlijst voor een levertransplantatie?',o:['Ja','Nee','Weet ik niet']},
+{k:'he',t:'Ben je ooit opgenomen of erg verward geweest door je lever?',o:['Ja','Nee','Weet ik niet']},
+{k:'med',t:'Gebruik je lactulose of rifaximine?',o:['Ja','Nee','Weet ik niet']},
+{k:'asc',t:'Heb je ooit buikvocht of een bloeding uit slokdarmaders gehad?',o:['Ja','Nee','Weet ik niet']}];
+let IQ={i:-1,a:{}};
+function intake(){stop();SP=false;IQ={i:-1,a:{}};
+ $.innerHTML=`<header class="top"><button class="gear" onclick="home()">‹</button><b>LeverHelder</b><span style="width:44px"></span></header><span class="chip">Intake voor mensen met een leverziekte</span><h1 style="margin-top:12px">Jouw gezondheid, jouw alertheid</h1><p class="mute">Persoonlijke intake · ongeveer 2 minuten</p><p>Met een paar korte vragen past de app zich aan jou aan, zodat je rustig en veilig kunt beginnen.</p><div class="card"><div style="display:flex;gap:12px;align-items:flex-start"><span class="ico">🛡</span><div><h2>Privacy en veiligheid</h2><p class="mute" style="margin:0">Je antwoorden zijn bedoeld om de informatie in de app aan te passen. De vragenlijst stelt geen medische diagnose. Je antwoorden blijven op deze telefoon.</p></div></div></div><button onclick="iq(0)">Start de intake</button><button class="alt" onclick="home()">Nu niet</button>`}
+function iq(i){IQ.i=i;if(i>=IQS.length)return iqEnd();const q=IQS[i];
+ $.innerHTML=`<div class="prog">Vraag ${i+1} van ${IQS.length}</div><div class="bar"><i style="width:${i/IQS.length*100}%"></i></div><h1>${q.t}</h1>${q.o.map((x,j)=>`<button class="alt" onclick="iqa(${i},${j})">${x}</button>`).join('')}${i?`<button class="alt" style="border:0" onclick="iq(${i-1})">‹ Vorige vraag</button>`:''}`}
+function iqa(i,j){IQ.a[IQS[i].k]=j;if(i===0&&j===2)return suf('iq(0)');iq(i+1)}
+function suf(back){$.innerHTML=`<div class="hero warn"><div style="font-size:48px">🛡</div><h1>Doe de test nu nog niet</h1><p>Je voelt je op dit moment suf of verward. Rust uit, laat iemand bij je blijven en neem contact op met je arts of behandelend team. Wordt het erger, neem dan direct contact op.</p></div><p class="mute">De test is niet bedoeld voor momenten dat je je niet goed voelt. Kom terug als je je weer helder voelt.</p><button onclick="home()">Sluiten</button><button class="alt" onclick="${back}">Antwoord aanpassen</button>`}
+function iqEnd(){const a=IQ.a,y=k=>a[k]===0||a[k]===2;let p=0;if(y('he'))p+=2;if(y('med'))p+=2;if(y('asc'))p+=1;if(a.dz===0)p+=1;if(a.sleep>=1)p+=1;
+ LV=a.tx===0?3:p>=3?2:1;if(a.sleep===2&&LV<2)LV=2;DZ=IQS[2].o[a.dz];PERS=true;try{localStorage.setItem(KEY+'-pers','1');localStorage.setItem(KEY+'-dz',DZ)}catch(e){}save();
+ $.innerHTML=`<div class="hero ok"><div style="font-size:44px">✅</div><h1>Je intake is klaar</h1><p class="mute">Jouw startniveau</p><h2>${LEVELS[LV].naam}</h2></div>
+ <div class="card"><h2>Zo begin je veilig</h2><p class="mute">Doe de test uitgerust en op een rustig moment.</p><p class="mute">Je eerste dagen zijn je eigen uitgangspunt. De app vergelijkt jou met jezelf.</p><p class="mute" style="margin:0">Voel je je suf of verward? Doe dan geen test en neem contact op met je arts.</p></div>${a.sleep===2?'<div class="card"><p class="mute" style="margin:0">Je gaf aan dat je overdag veel slaapt en s nachts wakker bent. Vertel dit aan je arts.</p></div>':''}
+ <input id="nm" maxlength="20" value="${NM}" placeholder="Hoe mag ik je noemen? (optioneel)" style="${INP}"><p class="mute" style="margin-top:12px">Dit past alleen de app aan. Het is geen diagnose.</p><button onclick="iqDone()">Start mijn eerste test</button><button class="alt" onclick="iqSave()">Later testen</button>`}
+function iqSave(){NM=(document.getElementById('nm').value||'').trim().slice(0,20);try{localStorage.setItem(KEY+'-nm',NM)}catch(e){}home()}
+function iqDone(){NM=(document.getElementById('nm').value||'').trim().slice(0,20);try{localStorage.setItem(KEY+'-nm',NM)}catch(e){}startFlow()}
+function startFlow(){FL={i:0};const gs=LEVELS[LV].games;
+ $.innerHTML=`<header class="top"><button class="gear" onclick="FL=null;home()">‹</button><b>Sufheid test</b><span style="width:44px"></span></header><div class="steps">${gs.map((g,i)=>(i?'<span class="ln"></span>':'')+`<span class="st ${i?'':'on'}">${i+1}</span>`).join('')}</div><h1 style="text-align:center">Klaar?</h1><p style="text-align:center">Eerst een korte check. Hoe voel je je nu?</p><button onclick="start(LEVELS[LV].games[0])">Ik voel me helder</button><button class="alt" onclick="suf('startFlow()')">Ik voel me suf of verward</button>${PERS?'':`<div class="card"><p class="mute">Nieuw hier? Doe eerst de korte intake (2 minuten) voor een veilige start.</p><button class="alt" onclick="intake()">Start de intake</button></div>`}<p class="mute" style="text-align:center">Duur: ongeveer ${gs.length} minuten</p>`}
+let LANG='nl';try{LANG=localStorage.getItem(KEY+'-lang')||'nl'}catch(e){}
+const EN_RAW=`Meet je sufheid.=Measure your drowsiness.
+Blijf alert.=Stay alert.
+Leef gezonder.=Live healthier.
+Start test=Start test
+Meer informatie=More information
+Voor jouw veiligheid=For your safety
+Hoe voel je je vandaag?=How are you feeling today?
+Sufheid test=Drowsiness test
+Test je alertheid in minder dan 2 minuten.=Test your alertness in under 2 minutes.
+Standaard test=Standard test
+Mijn scores=My scores
+Nog geen metingen.=No measurements yet.
+nog niet gedaan=not done yet
+Mijn resultaten=My results
+Bekijk je eerdere scores=View your earlier scores
+Tips & advies=Tips & advice
+Hoe blijf je alert?=How do you stay alert?
+Account (optioneel)=Account (optional)
+Alles staat nu op deze telefoon=Everything is stored on this phone
+Persoonlijke intake · ongeveer 2 minuten=Personal intake · about 2 minutes
+Persoonlijke intake=Personal intake
+Ongeveer 2 minuten. Zo begin je veilig en past de app zich aan jou aan. Geen diagnose.=About 2 minutes. It helps you start safely and tailors the app to you. Not a diagnosis.
+Start de intake=Start the intake
+Ontlasting vandaag=Bowel movements today
+Meestal goed: 2 tot 3 keer per dag=Usually fine: 2 to 3 times a day
+Een terug=One back
+Resultaten=Results
+Goed: je bent alert=Good: you are alert
+Let op: lager dan normaal=Attention: lower than normal
+Niet goed=Not good
+Goed=Good
+Let op=Attention
+Opnieuw=Again
+Klaar?=Ready?
+Eerst een korte check. Hoe voel je je nu?=First a quick check. How do you feel right now?
+Ik voel me helder=I feel clear-headed
+Ik voel me suf of verward=I feel drowsy or confused
+Nieuw hier? Doe eerst de korte intake (2 minuten) voor een veilige start.=New here? Do the short intake first (2 minutes) for a safe start.
+Doe de test nu nog niet=Do not take the test yet
+Je voelt je op dit moment suf of verward. Rust uit, laat iemand bij je blijven en neem contact op met je arts of behandelend team. Wordt het erger, neem dan direct contact op.=You feel drowsy or confused right now. Rest, have someone stay with you and contact your doctor or care team. If it gets worse, contact them right away.
+De test is niet bedoeld voor momenten dat je je niet goed voelt. Kom terug als je je weer helder voelt.=The test is not meant for moments when you feel unwell. Come back when you feel clear-headed again.
+Sluiten=Close
+Antwoord aanpassen=Change answer
+Intake voor mensen met een leverziekte=Intake for people with a liver disease
+Jouw gezondheid, jouw alertheid=Your health, your alertness
+Met een paar korte vragen past de app zich aan jou aan, zodat je rustig en veilig kunt beginnen.=With a few short questions the app adapts to you, so you can start calmly and safely.
+Privacy en veiligheid=Privacy and safety
+Je antwoorden zijn bedoeld om de informatie in de app aan te passen. De vragenlijst stelt geen medische diagnose. Je antwoorden blijven op deze telefoon.=Your answers are only used to tailor the information in the app. The questionnaire does not make a medical diagnosis. Your answers stay on this phone.
+Nu niet=Not now
+‹ Vorige vraag=‹ Previous question
+Hoe voel je je op dit moment?=How do you feel right now?
+Helder en alert=Clear-headed and alert
+Wat moe, maar normaal=A bit tired, but normal
+Suf, verward of heel slaperig=Drowsy, confused or very sleepy
+Slaap je overdag veel en ben je 's nachts wakker?=Do you sleep a lot during the day and stay awake at night?
+Ja, vaak=Yes, often
+Welke leverziekte heb je?=Which liver disease do you have?
+Levercirrose=Liver cirrhosis
+Hepatitis (ontsteking)=Hepatitis (inflammation)
+Een andere leverziekte=Another liver disease
+Weet ik niet=I don't know
+Sta je op de wachtlijst voor een levertransplantatie?=Are you on the waiting list for a liver transplant?
+Ben je ooit opgenomen of erg verward geweest door je lever?=Have you ever been hospitalised or very confused because of your liver?
+Gebruik je lactulose of rifaximine?=Do you use lactulose or rifaximin?
+Heb je ooit buikvocht of een bloeding uit slokdarmaders gehad?=Have you ever had fluid in your abdomen or bleeding from oesophageal veins?
+Je intake is klaar=Your intake is done
+Jouw startniveau=Your starting level
+Groep 1: stabiel=Group 1: stable
+Groep 2: verhoogd risico=Group 2: increased risk
+Groep 3: wachtlijst transplantatie=Group 3: transplant waiting list
+Zo begin je veilig=How to start safely
+Doe de test uitgerust en op een rustig moment.=Take the test rested and at a calm moment.
+Je eerste dagen zijn je eigen uitgangspunt. De app vergelijkt jou met jezelf.=Your first days are your own baseline. The app compares you with yourself.
+Voel je je suf of verward? Doe dan geen test en neem contact op met je arts.=Feeling drowsy or confused? Then do not take a test and contact your doctor.
+Dit past alleen de app aan. Het is geen diagnose.=This only adapts the app. It is not a diagnosis.
+Start mijn eerste test=Start my first test
+Later testen=Test later
+Alertheidsscore=Alertness score
+Je scores zijn op dit moment goed. Je blijft alert, maar let op bij vermoeidheid.=Your scores are good right now. You stay alert, but be careful when tired.
+Je score is lager dan normaal.=Your score is lower than normal.
+Je score is laag.=Your score is low.
+Neem regelmatig pauzes, zorg voor voldoende slaap en blijf gehydrateerd.=Take regular breaks, get enough sleep and stay hydrated.
+Rust even uit en probeer het over een uur opnieuw. De test is niet 100% zeker.=Rest a moment and try again in an hour. The test is not 100% certain.
+Probeer het over een uur opnieuw. Voel je je suf of verward? Neem dan contact op met je arts.=Try again in an hour. Feeling drowsy or confused? Then contact your doctor.
+Advies=Advice
+Nieuwe test=New test
+Bewaard op deze telefoon.=Saved on this phone.
+Nog geen test=No test yet
+Overzicht voor mijn arts=Overview for my doctor
+Overzicht=Overview
+Je score de afgelopen dagen=Your score over the past days
+Geschiedenis=History
+Per dag en per uur=Per day and per hour
+Alle scores op één pagina=All scores on one page
+Aantal dieren per dag=Number of animals per day
+Score per dag=Score per day
+Aantal keer per dag=Times per day
+Nog niets bijgehouden.=Nothing recorded yet.
+Ontlasting=Bowel movements
+Voldoende slaap=Enough sleep
+Slaap 7 tot 9 uur per nacht en houd een vast ritme.=Sleep 7 to 9 hours a night and keep a regular rhythm.
+Medicijnen=Medication
+Neem je medicijnen zoals je arts heeft verteld.=Take your medication as your doctor told you.
+Geen alcohol=No alcohol
+Alcohol is slecht voor je lever en kan je sufheid erger maken.=Alcohol is bad for your liver and can make drowsiness worse.
+Regelmatige ontlasting=Regular bowel movements
+Meestal helpt 2 tot 3 keer per dag tegen sufheid.=Usually 2 to 3 times a day helps prevent drowsiness.
+Gezonde levensstijl=Healthy lifestyle
+Eet gezond, beweeg en vermijd stress.=Eat healthy, exercise and avoid stress.
+Terug naar home=Back to home
+Noem in 1 minuut zoveel mogelijk dieren.=Name as many animals as you can in 1 minute.
+Noem in 1 minuut zoveel mogelijk =Name as many =
+verschillende dieren=different animals
+. Zeg ze hardop. Tik na elk dier op =. Say them out loud. After each animal tap 
+, of laat iemand anders voor je tellen. Hetzelfde dier twee keer telt niet.=, or have someone else count. The same animal twice does not count.
+Dit is dezelfde vraag die de arts stelt. Voorbeeld: hond, kat, paard.=This is the same question the doctor asks. Example: dog, cat, horse.
+Start de minuut=Start the minute
+Tik de kleur van de letters, niet het woord.=Tap the colour of the letters, not the word.
+Tik zo snel mogelijk als het vlak groen wordt.=Tap as fast as you can when the area turns green.
+Onthoud de cijfers en tik ze in de juiste volgorde.=Remember the digits and tap them in the right order.
+Je ziet een woord in een kleur. Tik de =You see a word in a colour. Tap the 
+kleur van de letters=colour of the letters
+, niet wat er staat. Neem rustig de tijd.=, not what it says. Take your time.
+Je ziet losse cijfers na elkaar. Tik ze daarna in dezelfde volgorde in. Het wordt steeds langer.=You see single digits one after another. Then tap them in the same order. It keeps getting longer.
+Tik de cijfers in dezelfde volgorde=Tap the digits in the same order
+Zodra het vlak groen wordt, tik je zo snel mogelijk. 5 keer.=As soon as the area turns green, tap as fast as you can. 5 times.
+Tik om te beginnen=Tap to begin
+Te vroeg! Tik om opnieuw te proberen.=Too early! Tap to try again.
+Dierentest=Animal test
+Kleurentest=Colour test
+Reactiesnelheid=Reaction speed
+Cijferreeks=Digit sequence
+ROOD=RED
+BLAUW=BLUE
+GROEN=GREEN
+Je gebruikt de app zonder account=You are using the app without an account
+Je hoeft niets aan te maken. Je resultaten staan op deze telefoon en blijven daar bewaard.=You don't need to create anything. Your results are stored on this phone and stay there.
+Op een ander toestel kijken?=View on another device?
+Kopieer deze code en plak hem op je andere toestel. Dan staan je resultaten daar ook.=Copy this code and paste it on your other device. Your results will be there too.
+Kopieer code=Copy code
+Code van een ander toestel plakken=Paste a code from another device
+Laad gegevens=Load data
+Account met inloggen=Account with login
+Automatisch synchroniseren met een account komt later. Daar is een server voor nodig, en die is er in deze versie nog niet.=Automatic syncing with an account is coming later. That needs a server, which this version doesn't have yet.
+Instellingen=Settings
+Vragen opnieuw invullen=Answer the questions again
+Naam wijzigen=Change name
+Scores wissen=Delete scores
+Alle scores en ontlasting wissen?=Delete all scores and bowel movements?
+Ja, wissen=Yes, delete
+Annuleren=Cancel
+Geen diagnose. Bij klachten of twijfel: bel altijd je arts.=Not a diagnosis. If you have symptoms or doubts: always call your doctor.
+Je lever is op dit moment stabiel. Elke dag 3 korte spelletjes, met de dierentest als eerste.=Your liver is stable at the moment. 3 short games a day, starting with the animal test.
+Je hebt een hoger risico op sufheid. Elke dag 4 spelletjes en een scherpere waarschuwing.=You have a higher risk of drowsiness. 4 games a day and a more sensitive warning.
+Je wacht op een levertransplantatie. Elke dag 4 spelletjes en de gevoeligste waarschuwing.=You are waiting for a liver transplant. 4 games a day and the most sensitive warning.
+Statistieken=Statistics
+Waar ben ik nu?=Where am I now?
+Samenvatting (laatste 7 dagen)=Summary (last 7 days)
+Gemiddelde score per dag=Average score per day
+Gemiddelde score=Average score
+Gemiddeld aantal dieren=Average number of animals
+Ontlasting per dag=Bowel movements per day
+Dagen met meting=Days with a measurement
+Alle scores=All scores
+Print of bewaar als PDF=Print or save as PDF
+Kopieer als tekst=Copy as text
+Gemaakt met LeverHelder. Dit is geen diagnose.=Made with LeverHelder. This is not a diagnosis.
+Vandaag per uur=Today per hour
+Per spelletje=Per game
+Per dag=Per day
+Per uur=Per hour
+Taal / Language=Language / Taal
+aantal dieren in 1 minuut (15 of meer is normaal). Andere spelletjes: score van 0 tot 100.=number of animals in 1 minute (15 or more is normal). Other games: score from 0 to 100.
+aantal keer ontlasting.=number of bowel movements.
+Nog niets om mee te vergelijken=Nothing to compare with yet
+Vandaag:=Today:
+keer=times`;
+const EN_MAP={};EN_RAW.split('\n').forEach(l=>{const i=l.indexOf('=');if(i>0)EN_MAP[l.slice(0,i)]=l.slice(i+1)});
+const EN_EX={Ma:'Mo',Di:'Tu',Wo:'We',Do:'Th',Vr:'Fr',Za:'Sa',Zo:'Su',Dag:'Day','Gem.':'Avg.',Ja:'Yes',Nee:'No',Soms:'Sometimes',wis:'del',dieren:'animals',score:'score',Begin:'Begin',Details:'Details',Info:'Info',Home:'Home',Start:'Start',Patiënt:'Patient'};
+const EN_RE=new RegExp(Object.keys(EN_MAP).sort((a,b)=>b.length-a.length).map(k=>k.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('|'),'g');
+const GR={Goedemorgen:'Good morning',Goedemiddag:'Good afternoon',Goedenavond:'Good evening'};
+const EN_PA=[[/^(Goedemorgen|Goedemiddag|Goedenavond)(, (.+))?$/,(m,g,x,n)=>GR[g]+(n?', '+(n==='welkom'?'welcome':n):'')],[/^(\d+) dagen op rij$/,'$1 days in a row'],[/^Vraag (\d+) van (\d+)$/,'Question $1 of $2'],[/^Duur: ongeveer (\d+) minuten$/,'Duration: about $1 minutes'],[/^Je krijgt straks (\d+) korte spelletjes\. Doe ze rustig en zo goed mogelijk\.$/,'You will get $1 short games. Take them calmly and do your best.'],[/^(\d+) van (\d+)$/,'$1 of $2'],[/^(\d+) seconden$/,'$1 seconds'],[/^Onthoud (\d+) cijfers$/,'Remember $1 digits'],[/^Wacht\.\.\. \((\d+) van 5\)$/,'Wait... ($1 of 5)'],[/^(\d+) ms\. Tik voor de volgende\.$/,'$1 ms. Tap for the next one.'],[/^Datum: (.+)$/,'Date: $1']];
+EN_PA.push([/^([+-]?\d+) ten opzichte van (de vorige dag|het vorige uur)$/,(m,n,x)=>n+' compared with the '+(x==='het vorige uur'?'previous hour':'previous day')]);
+const EN_PH={'Jouw naam':'Your name','Hoe mag ik je noemen? (optioneel)':'What may I call you? (optional)','Plak hier je code':'Paste your code here'};
+function trans(root){if(LANG!=='en')return;const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT),L=[];while(w.nextNode())L.push(w.currentNode);
+ L.forEach(t=>{if(t.parentNode&&t.parentNode.nodeName==='TEXTAREA')return;const v=t.nodeValue,s=v.trim();if(!s)return;let r=v;
+  if(EN_EX[s])r=v.replace(s,EN_EX[s]);else{const p=EN_PA.find(x=>x[0].test(s));r=p?v.replace(s,s.replace(p[0],p[1])):v.replace(EN_RE,m=>EN_MAP[m])}
+  if(r!==v)t.nodeValue=r});
+ root.querySelectorAll('input[placeholder]').forEach(i=>{const k=i.dataset.p||i.placeholder;if(EN_PH[k]){i.dataset.p=k;i.placeholder=EN_PH[k]}})}
+new MutationObserver(()=>trans($)).observe($,{childList:true,subtree:true,characterData:true});
+function LANGBTN(from){const sh=from==='splash';return [['nl',sh?'NL':'Nederlands'],['en',sh?'EN':'English']].map(x=>`<button class="lgb ${LANG===x[0]?'':'alt'}" onclick="setLang('${x[0]}','${from}')">${x[1]}</button>`).join('')}
+function setLang(l,from){LANG=l;try{localStorage.setItem(KEY+'-lang',l)}catch(e){}document.documentElement.lang=l;document.body.style.setProperty('--done',l==='en'?'"Done"':'"Gedaan"');if(from==='splash')splash();else inst()}
+document.documentElement.lang=LANG;document.body.style.setProperty('--done',LANG==='en'?'"Done"':'"Gedaan"');
+home();
+</script></body></html>
